@@ -1,0 +1,70 @@
+/* ============================================================
+   THEME — Color tokens for light (default) and dark modes
+   ============================================================ */
+
+:root {
+  /* ---- surfaces ---- */
+  --bg-primary:       #F2F4F7;
+  --bg-slide:         #FFFFFF;
+  --bg-card:          #F7F8FA;
+  --bg-code:          #F5F7FA;
+
+  /* ---- text ---- */
+  --text-primary:     #1A1A2E;
+  --text-secondary:   #3D5A80;
+  --text-muted:       #8892A0;
+  --text-inverse:     #F0F0F5;
+
+  /* ---- accent — data series & highlights ---- */
+  --accent-1:         #2EC4B6;   /* teal  — Q-Learning / positive  */
+  --accent-2:         #E07A5F;   /* coral — Actor-Critic / negative */
+  --accent-3:         #F4A261;   /* amber — tertiary / annotations  */
+  --accent-1-light:   rgba(46,196,182,0.15);
+  --accent-2-light:   rgba(224,122,95,0.15);
+
+  /* ---- structural ---- */
+  --border:           #D0D7E2;
+  --svg-grid:         #D0D7E2;
+  --nav-dot:          #C0C8D4;
+  --nav-dot-active:   #3D5A80;
+  --shadow:           0 2px 12px rgba(27,42,74,0.06);
+
+  /* ---- progress bar ---- */
+  --progress-bg:      #D0D7E2;
+  --progress-fill:    #3D5A80;
+
+  /* ---- slide title accent line ---- */
+  --title-accent:     #2EC4B6;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+[data-theme="dark"] {
+  --bg-primary:       #0F1923;
+  --bg-slide:         #162035;
+  --bg-card:          #1B2A4A;
+  --bg-code:          #152238;
+
+  --text-primary:     #F0F0F5;
+  --text-secondary:   #8AB4F8;
+  --text-muted:       #6B7B8D;
+  --text-inverse:     #1A1A2E;
+
+  --accent-1:         #2EC4B6;
+  --accent-2:         #E07A5F;
+  --accent-3:         #F4A261;
+  --accent-1-light:   rgba(46,196,182,0.12);
+  --accent-2-light:   rgba(224,122,95,0.12);
+
+  --border:           #2A3F5F;
+  --svg-grid:         #243352;
+  --nav-dot:          #3A4D6A;
+  --nav-dot-active:   #8AB4F8;
+  --shadow:           0 2px 16px rgba(0,0,0,0.30);
+
+  --progress-bg:      #243352;
+  --progress-fill:    #8AB4F8;
+
+  --title-accent:     #2EC4B6;
+}

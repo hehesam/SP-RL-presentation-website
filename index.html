@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q-Learning vs Policy Gradient — MountainCar</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- D3.js v7 -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/typography.css" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     GLOBAL UI
+     ============================================================ -->
+<!-- Progress bar -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Slide counter -->
+<div class="slide-counter" id="slideCounter">01 / 16</div>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">☀</button>
+
+<!-- Navigation dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ============================================================
+     SLIDES CONTAINER
+     ============================================================ -->
+<main class="slides-container" id="slidesContainer">
+
+  <!-- ====== SLIDE 1 — Title ====== -->
+  <section class="slide slide--title" id="slide-1" data-slide="1">
+    <div class="title-bg-art" id="titleBgArt"></div>
+    <div class="slide-inner">
+      <h1>Comparing Q-Learning and Policy Gradient with RBF Features on MountainCar</h1>
+      <p class="subtitle">A study of value-based vs policy-based reinforcement learning</p>
+      <p class="author">Hesam Mohebi &middot; University of Genova</p>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 2 — Motivation ====== -->
+  <section class="slide" id="slide-2" data-slide="2">
+    <div class="slide-inner">
+      <h2 class="slide-title">Motivation</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Reinforcement learning provides a principled framework for sequential decision making under uncertainty. An agent interacts with an environment, receiving rewards and learning to maximize long-term return.</p>
+          <p>This project compares two major families of RL methods:</p>
+          <ul>
+            <li><strong>Value-based methods</strong> — learn the value of state-action pairs, derive a policy indirectly</li>
+            <li><strong>Policy-based methods</strong> — learn the policy directly from experience</li>
+          </ul>
+          <p>MountainCar is a classic benchmark: simple enough to analyze clearly, yet challenging enough to require sophisticated exploration and long-term planning.</p>
+          <p>With a <strong>continuous state space</strong>, function approximation is essential — making this comparison both practical and theoretically informative.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-motivation"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 3 — The MountainCar problem ====== -->
+  <section class="slide" id="slide-3" data-slide="3">
+    <div class="slide-inner">
+      <h2 class="slide-title">The MountainCar Problem</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>A car is placed in a valley between two hills. The goal is to reach the top of the <strong>right hill</strong>.</p>
+          <p>The engine is too weak to drive directly uphill — the car must <strong>build momentum</strong> by rocking back and forth.</p>
+          <ul>
+            <li><strong>State:</strong> position \(x \in [-1.2, 0.6]\), velocity \(\dot{x} \in [-0.07, 0.07]\)</li>
+            <li><strong>Actions:</strong> push left (0), no push (1), push right (2)</li>
+            <li><strong>Reward:</strong> \(-1\) per time step until goal is reached</li>
+          </ul>
+          <p>The environment terminates when the car reaches position \(\geq 0.5\) (success) or after 200 steps (failure).</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-mountaincar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 4 — Q-Learning ====== -->
+  <section class="slide" id="slide-4" data-slide="4">
+    <div class="slide-inner">
+      <h2 class="slide-title">Q-Learning</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Q-learning is a <strong>value-based</strong> method that estimates the action-value function \(Q(s,a)\) — the expected return from taking action \(a\) in state \(s\) and following the optimal policy thereafter.</p>
+          <p>The policy is obtained by selecting the action with the highest estimated Q-value:</p>
+          <div class="equation-block">$$\pi(s) = \arg\max_a Q(s,a)$$</div>
+          <p>The core update rule (semi-gradient with function approximation):</p>
+          <div class="equation-block">$$\mathbf{w} \leftarrow \mathbf{w} + \alpha \left[ r + \gamma \max_{a'} Q(s',a') - Q(s,a) \right] \nabla_{\mathbf{w}} Q(s,a)$$</div>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-qlearning"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 5 — Policy Gradient / Actor-Critic ====== -->
+  <section class="slide" id="slide-5" data-slide="5">
+    <div class="slide-inner">
+      <h2 class="slide-title">Policy Gradient / Actor-Critic</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Policy gradient methods learn the policy <strong>directly</strong> by parameterizing \(\pi_\theta(a|s)\) and optimizing expected return via gradient ascent.</p>
+          <p>The <strong>Actor-Critic</strong> architecture combines:</p>
+          <ul>
+            <li><strong>Actor:</strong> softmax policy that selects actions</li>
+            <li><strong>Critic:</strong> estimates state value \(V(s)\) as a baseline</li>
+          </ul>
+          <p>The advantage \(\delta = r + \gamma V(s') - V(s)\) tells the actor whether the action was better or worse than expected, reducing variance.</p>
+          <div class="equation-block">$$\theta \leftarrow \theta + \alpha_\theta \, \delta \, \nabla_\theta \ln \pi_\theta(a|s)$$</div>
+          <div class="equation-block">$$\mathbf{w} \leftarrow \mathbf{w} + \alpha_w \, \delta \, \nabla_{\mathbf{w}} V_{\mathbf{w}}(s)$$</div>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-actorcritic"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 6 — Why function approximation ====== -->
+  <section class="slide" id="slide-6" data-slide="6">
+    <div class="slide-inner">
+      <h2 class="slide-title">Why Function Approximation?</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>MountainCar has a <strong>continuous state space</strong>: position and velocity are real-valued, creating an infinite number of possible states.</p>
+          <p>Tabular methods would require discretizing the space into bins — losing resolution, introducing aliasing, and scaling poorly.</p>
+          <p>Function approximation enables:</p>
+          <ul>
+            <li>Generalization across similar states</li>
+            <li>Compact representation of value/policy</li>
+            <li>Efficient learning from limited experience</li>
+          </ul>
+          <p>Both Q-learning and Actor-Critic in this project use the <strong>same RBF feature representation</strong>, ensuring a fair comparison.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-funcapprox"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 7 — RBF Feature Map ====== -->
+  <section class="slide" id="slide-7" data-slide="7">
+    <div class="slide-inner">
+      <h2 class="slide-title">RBF Feature Map</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Both algorithms share a common feature representation based on <strong>Radial Basis Functions</strong> (RBFs):</p>
+          <ol>
+            <li><strong>Normalize</strong> state dimensions to \([0,1]\)</li>
+            <li>Place a <strong>grid of centers</strong> across the normalized space</li>
+            <li>Compute Gaussian activations:</li>
+          </ol>
+          <div class="equation-block">$$\phi_i(s) = \exp\!\left( -\frac{\|s - c_i\|^2}{2\sigma^2} \right)$$</div>
+          <p>Nearby centers activate strongly; distant ones contribute little. This creates a smooth, local feature representation.</p>
+          <p class="text-muted text-sm">Grid size, \(\sigma\), and exact values are placeholders — to be filled with final hyperparameters.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-rbf"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 8 — Experimental Roadmap ====== -->
+  <section class="slide" id="slide-8" data-slide="8">
+    <div class="slide-inner">
+      <h2 class="slide-title">Experimental Roadmap</h2>
+      <p>The methodology follows a structured sequence to ensure fair and reproducible comparison:</p>
+      <div class="chart-container" id="chart-roadmap" style="flex:1; min-height:180px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 9 — Experimental Setup ====== -->
+  <section class="slide" id="slide-9" data-slide="9">
+    <div class="slide-inner">
+      <h2 class="slide-title">Experimental Setup</h2>
+      <p>Both methods are evaluated under an identical protocol to ensure fair comparison:</p>
+      <div class="info-cards" id="setup-cards">
+        <!-- Populated by JS -->
+      </div>
+      <div class="chart-container" id="chart-setup" style="margin-top:1rem;"></div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 10 — Q-Learning Implementation ====== -->
+  <section class="slide" id="slide-10" data-slide="10">
+    <div class="slide-inner">
+      <h2 class="slide-title">Q-Learning — Implementation Details</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Q-values are approximated as a <strong>linear combination</strong> of RBF features:</p>
+          <div class="equation-block">$$Q(s,a) = \mathbf{w}_a^\top \boldsymbol{\phi}(s)$$</div>
+          <p>Each action has its own weight vector. The agent uses <strong>\(\varepsilon\)-greedy</strong> exploration during training — choosing a random action with probability \(\varepsilon\), and the greedy action otherwise.</p>
+          <p>The semi-gradient update adjusts weights toward the TD target, but note the <strong>deadly triad</strong>: combining bootstrapping, off-policy learning, and function approximation can cause instability.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-qlearning-impl"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 11 — Actor-Critic Implementation ====== -->
+  <section class="slide" id="slide-11" data-slide="11">
+    <div class="slide-inner">
+      <h2 class="slide-title">Actor-Critic — Implementation Details</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>The <strong>actor</strong> uses a softmax policy over RBF features:</p>
+          <div class="equation-block">$$\pi_\theta(a|s) = \frac{\exp(\theta_a^\top \phi(s))}{\sum_{a'} \exp(\theta_{a'}^\top \phi(s))}$$</div>
+          <p>The <strong>critic</strong> estimates the state value as:</p>
+          <div class="equation-block">$$V_{\mathbf{w}}(s) = \mathbf{w}^\top \boldsymbol{\phi}(s)$$</div>
+          <p>The TD error \(\delta = r + \gamma V(s') - V(s)\) serves as the advantage estimate. The critic reduces variance of the policy gradient, leading to more stable learning.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-ac-impl"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 12 — Hyperparameter Tuning ====== -->
+  <section class="slide" id="slide-12" data-slide="12">
+    <div class="slide-inner">
+      <h2 class="slide-title">Hyperparameter Tuning &amp; Fairness</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Both methods were tuned using the <strong>same feature map</strong> and evaluation protocol. Key hyperparameters:</p>
+          <ul>
+            <li><strong>Q-Learning:</strong> learning rate \(\alpha\), RBF width \(\sigma\), \(\varepsilon\)-decay schedule</li>
+            <li><strong>Actor-Critic:</strong> actor LR \(\alpha_\theta\), critic LR \(\alpha_w\), RBF width \(\sigma\)</li>
+          </ul>
+          <p class="text-muted text-sm">Heatmaps show placeholder sensitivity data. Exact values will be filled with final experiment results.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-hyperparams"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 13 — Learning Curves Comparison ====== -->
+  <section class="slide" id="slide-13" data-slide="13">
+    <div class="slide-inner">
+      <h2 class="slide-title">Learning Curves</h2>
+      <p>Training performance comparison across episodes (placeholder data):</p>
+      <div class="slide-columns" style="flex:1; min-height:0;">
+        <div class="slide-col">
+          <div class="chart-container" id="chart-return-curve" style="height:100%;"></div>
+        </div>
+        <div class="slide-col">
+          <div class="chart-container" id="chart-success-curve" style="height:100%;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 14 — Final Results Summary ====== -->
+  <section class="slide" id="slide-14" data-slide="14">
+    <div class="slide-inner">
+      <h2 class="slide-title">Final Results</h2>
+      <p>Summary comparison of Q-Learning vs Actor-Critic after training (placeholder values):</p>
+      <div class="chart-container" id="chart-final-results" style="flex:1; min-height:200px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 15 — Interpretation ====== -->
+  <section class="slide" id="slide-15" data-slide="15">
+    <div class="slide-inner">
+      <h2 class="slide-title">Interpretation</h2>
+      <div class="slide-columns">
+        <div class="slide-col slide-col--text">
+          <p>Both methods successfully learn to solve MountainCar, but exhibit different trade-offs:</p>
+          <ul>
+            <li>Q-Learning may achieve <strong>slightly better final performance</strong> after full convergence</li>
+            <li>Actor-Critic can learn <strong>competitively in early training phases</strong></li>
+            <li>Results depend heavily on the quality of the <strong>feature representation</strong> and hyperparameter choices</li>
+          </ul>
+          <p class="text-muted text-sm">Placeholder comparison scores shown. To be updated with final analysis.</p>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-interpretation"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 16 — Conclusion ====== -->
+  <section class="slide slide--conclusion" id="slide-16" data-slide="16">
+    <div class="conclusion-bg-art" id="conclusionBgArt"></div>
+    <div class="slide-inner">
+      <h2 class="text-2xl" style="margin-bottom:1.5rem;">Conclusion</h2>
+      <ul class="conclusion-points">
+        <li>MountainCar requires <strong>long-term planning</strong> due to sparse reward and momentum-based dynamics</li>
+        <li>RBF features provide a <strong>shared, fair representation</strong> for comparing methods in continuous state space</li>
+        <li>Both Q-Learning and Actor-Critic <strong>solve the task</strong> with proper tuning</li>
+        <li>The two families offer <strong>different strengths</strong> — value-based precision vs policy-based flexibility</li>
+      </ul>
+      <p class="text-muted" style="margin-top:2rem;">Thank you &middot; Questions?</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     SCRIPTS — ES modules
+     ============================================================ -->
+<script type="module" src="js/main.js"></script>
+
+</body>
+</html>

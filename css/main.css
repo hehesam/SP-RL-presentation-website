@@ -1,0 +1,352 @@
+/* ============================================================
+   MAIN — Layout, scroll-snap, slides, nav, responsive
+   ============================================================ */
+
+/* ---- reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-primary);
+  overflow: hidden;          /* prevent body scroll; container handles it */
+}
+
+/* ---- slides container ---- */
+.slides-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  /* hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.slides-container::-webkit-scrollbar { display: none; }
+
+/* ---- individual slide ---- */
+.slide {
+  flex: 0 0 100vw;
+  min-width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  background: var(--bg-slide);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* inner wrapper — constrains content width, adds padding */
+.slide-inner {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding: 3.5rem 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.slide.is-visible .slide-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- slide section title ---- */
+.slide-title {
+  position: relative;
+  padding-bottom: 0.3em;
+}
+.slide-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 40px; height: 3px;
+  background: var(--title-accent);
+  border-radius: 2px;
+}
+
+/* ---- two-column layout helper ---- */
+.slide-columns {
+  display: flex;
+  gap: 3rem;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+}
+.slide-col {
+  flex: 1;
+  min-width: 0;
+}
+.slide-col--text { max-width: 480px; }
+.slide-col--viz  { flex: 1.2; display: flex; align-items: center; justify-content: center; }
+
+/* ---- content helpers ---- */
+.slide p { margin-bottom: 0.75em; color: var(--text-primary); }
+.slide ul { padding-left: 1.5em; margin-bottom: 0.75em; }
+.slide li { margin-bottom: 0.35em; color: var(--text-primary); }
+.slide li::marker { color: var(--accent-1); }
+
+/* ---- info cards grid ---- */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: var(--shadow);
+}
+.info-card .label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.3em;
+}
+.info-card .value {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   NAVIGATION — dots & progress bar
+   ============================================================ */
+.nav-dots {
+  position: fixed;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  padding: 6px 14px;
+  background: var(--bg-slide);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+.nav-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--nav-dot);
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+  padding: 0;
+}
+.nav-dot:hover { background: var(--text-muted); transform: scale(1.25); }
+.nav-dot.active {
+  background: var(--nav-dot-active);
+  transform: scale(1.3);
+}
+
+/* ---- top progress bar ---- */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--progress-bg);
+  z-index: 100;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--progress-fill);
+  transition: width 0.3s ease;
+}
+
+/* ---- theme toggle ---- */
+.theme-toggle {
+  position: fixed;
+  top: 1rem; right: 1rem;
+  z-index: 100;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow);
+  transition: background 0.25s, color 0.25s;
+}
+.theme-toggle:hover { background: var(--border); }
+
+/* ---- slide counter ---- */
+.slide-counter {
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 100;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================
+   D3 / SVG SHARED
+   ============================================================ */
+.chart-container {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chart-container svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* flow / pipeline diagram boxes */
+.d3-box rect {
+  fill: var(--bg-card);
+  stroke: var(--border);
+  stroke-width: 1.5;
+  rx: 6;
+}
+.d3-box text {
+  fill: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+
+/* ============================================================
+   TITLE SLIDE SPECIAL
+   ============================================================ */
+.slide--title {
+  background: linear-gradient(135deg, var(--bg-slide) 0%, var(--bg-primary) 100%);
+}
+.slide--title .slide-inner {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+.slide--title h1 {
+  font-size: var(--fs-3xl);
+  max-width: 900px;
+  line-height: 1.15;
+}
+.slide--title .subtitle {
+  font-size: var(--fs-lg);
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.slide--title .author {
+  font-size: var(--fs-base);
+  color: var(--text-muted);
+}
+.title-bg-art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+}
+[data-theme="dark"] .title-bg-art { opacity: 0.12; }
+
+/* ============================================================
+   CONCLUSION SLIDE
+   ============================================================ */
+.slide--conclusion .slide-inner {
+  align-items: center;
+  text-align: center;
+}
+.conclusion-points {
+  list-style: none;
+  padding: 0;
+  max-width: 700px;
+}
+.conclusion-points li {
+  font-size: var(--fs-lg);
+  padding: 0.6em 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.conclusion-points li:last-child { border-bottom: none; }
+
+/* ============================================================
+   COMPARISON COLUMNS
+   ============================================================ */
+.comparison-cols {
+  display: flex;
+  gap: 2rem;
+}
+.comparison-col {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.comparison-col h3 {
+  font-size: var(--fs-lg);
+  margin-bottom: 0.8em;
+}
+.comparison-col ul { padding-left: 1.2em; }
+
+/* ============================================================
+   RESPONSIVE — vertical fallback below 900px
+   ============================================================ */
+@media (max-width: 899px) {
+  body { overflow: auto; }
+
+  .slides-container {
+    flex-direction: column;
+    width: 100vw;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+  }
+
+  .slide {
+    flex: 0 0 auto;
+    min-width: 100vw;
+    min-height: 100vh;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .slide-inner {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+
+  .slide-columns {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .slide-col--text { max-width: 100%; }
+
+  .nav-dots { display: none; }
+
+  .slide-counter { display: none; }
+
+  .comparison-cols { flex-direction: column; }
+
+  .info-cards { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 599px) {
+  .slide-inner { padding: 2rem 1rem 1.5rem; }
+  .info-cards { grid-template-columns: 1fr; }
+  .mobile-hide { display: none !important; }
+}
