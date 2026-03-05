@@ -11,20 +11,22 @@ import { initSlide05 } from './slides/slide05-actor-critic.js';
 import { initSlide06 } from './slides/slide06-func-approx.js';
 import { initSlide07 } from './slides/slide07-rbf.js';
 import { initSlide08 } from './slides/slide08-roadmap.js';
-import { initSlide09 } from './slides/slide09-setup.js';
-import { initSlide10 } from './slides/slide10-qlearning-impl.js';
-import { initSlide11 } from './slides/slide11-actor-critic-impl.js';
-import { initSlide12 } from './slides/slide12-hyperparams.js';
-import { initSlide13 } from './slides/slide13-learning-curves.js';
-import { initSlide14 } from './slides/slide14-results.js';
-import { initSlide15 } from './slides/slide15-interpretation.js';
-import { initSlide16 } from './slides/slide16-conclusion.js';
+import { initSlide11 as initSlide09 } from './slides/slide11-experiment2.js';
+import { initSlide12 as initSlide10 } from './slides/slide12-multiseed-intro.js';
+import { initSlide13 as initSlide11 } from './slides/slide13-ql-curves.js';
+import { initSlide14 as initSlide12 } from './slides/slide14-ac-curves.js';
+import { initSlide15 as initSlide13 } from './slides/slide15-best-comparison.js';
+import { initSlide16 as initSlide14 } from './slides/slide16-heatmaps.js';
+import { initSlide17 as initSlide15 } from './slides/slide17-scatter.js';
+import { initSlide18 as initSlide16 } from './slides/slide18-success-curves.js';
+import { initSlide20 as initSlide17 } from './slides/slide20-summary.js';
 
 const slideInits = {
   1: initSlide01, 2: initSlide02, 3: initSlide03, 4: initSlide04,
   5: initSlide05, 6: initSlide06, 7: initSlide07, 8: initSlide08,
   9: initSlide09, 10: initSlide10, 11: initSlide11, 12: initSlide12,
   13: initSlide13, 14: initSlide14, 15: initSlide15, 16: initSlide16,
+  17: initSlide17,
 };
 
 /* ---- DOM refs ---- */
@@ -33,7 +35,7 @@ const progressFill = document.getElementById('progressFill');
 const slideCounter = document.getElementById('slideCounter');
 const navDots     = document.getElementById('navDots');
 const themeToggle = document.getElementById('themeToggle');
-const TOTAL       = 16;
+const TOTAL       = 17;
 
 let currentIndex  = 0;
 const initialized = new Set();

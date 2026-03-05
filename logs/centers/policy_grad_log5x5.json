@@ -1,0 +1,102 @@
+[
+  {
+    "EP": 50,
+    "eval_return": -128.95,
+    "success": 0.95
+  },
+  {
+    "EP": 100,
+    "eval_return": -159.8,
+    "success": 0.9
+  },
+  {
+    "EP": 150,
+    "eval_return": -147.85,
+    "success": 1.0
+  },
+  {
+    "EP": 200,
+    "eval_return": -149.6,
+    "success": 1.0
+  },
+  {
+    "EP": 250,
+    "eval_return": -170.3,
+    "success": 0.65
+  },
+  {
+    "EP": 300,
+    "eval_return": -152.0,
+    "success": 1.0
+  },
+  {
+    "EP": 350,
+    "eval_return": -150.05,
+    "success": 0.7
+  },
+  {
+    "EP": 400,
+    "eval_return": -200.0,
+    "success": 0.0
+  },
+  {
+    "EP": 450,
+    "eval_return": -200.0,
+    "success": 0.0
+  },
+  {
+    "EP": 500,
+    "eval_return": -189.7,
+    "success": 0.15
+  },
+  {
+    "EP": 550,
+    "eval_return": -150.25,
+    "success": 0.7
+  },
+  {
+    "EP": 600,
+    "eval_return": -138.35,
+    "success": 0.85
+  },
+  {
+    "EP": 650,
+    "eval_return": -137.95,
+    "success": 0.85
+  },
+  {
+    "EP": 700,
+    "eval_return": -139.25,
+    "success": 0.85
+  },
+  {
+    "EP": 750,
+    "eval_return": -145.65,
+    "success": 0.75
+  },
+  {
+    "EP": 800,
+    "eval_return": -142.1,
+    "success": 0.8
+  },
+  {
+    "EP": 850,
+    "eval_return": -135.85,
+    "success": 0.85
+  },
+  {
+    "EP": 900,
+    "eval_return": -127.4,
+    "success": 0.95
+  },
+  {
+    "EP": 950,
+    "eval_return": -122.4,
+    "success": 1.0
+  },
+  {
+    "EP": 1000,
+    "eval_return": -121.95,
+    "success": 1.0
+  }
+]

@@ -32,7 +32,7 @@
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
 <!-- Slide counter -->
-<div class="slide-counter" id="slideCounter">01 / 16</div>
+<div class="slide-counter" id="slideCounter">01 / 17</div>
 
 <!-- Theme toggle -->
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">☀</button>
@@ -93,7 +93,16 @@
           <p>The environment terminates when the car reaches position \(\geq 0.5\) (success) or after 200 steps (failure).</p>
         </div>
         <div class="slide-col slide-col--viz">
-          <div class="chart-container" id="chart-mountaincar"></div>
+          <div class="mc-gifs-container" id="mc-gifs">
+            <div class="mc-gif-item">
+              <img class="mc-gif" data-src="logs/mountain%20car%20gifs/all_episodes_q.gif" alt="Q-Learning training" />
+              <span class="mc-gif-label">Q-Learning</span>
+            </div>
+            <div class="mc-gif-item">
+              <img class="mc-gif" data-src="logs/mountain%20car%20gifs/all_episodes_ac.gif" alt="Actor-Critic training" />
+              <span class="mc-gif-label">Actor-Critic</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -196,135 +205,216 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 9 — Experimental Setup ====== -->
+  <!-- ====== SLIDE 9 — Experiment 2: 2000 Episodes ====== -->
   <section class="slide" id="slide-9" data-slide="9">
     <div class="slide-inner">
-      <h2 class="slide-title">Experimental Setup</h2>
-      <p>Both methods are evaluated under an identical protocol to ensure fair comparison:</p>
-      <div class="info-cards" id="setup-cards">
-        <!-- Populated by JS -->
+      <h2 class="slide-title">Experiment 2: Evaluating Q-Learning and Policy Gradient on 2000 Episodes</h2>
+      <div class="exp2-content">
+        <div class="exp2-chart-wrap">
+          <div class="chart-container" id="chart-exp2-return"></div>
+        </div>
+        <div class="exp2-analysis">
+          <div class="exp2-analysis-col">
+            <h4 style="color:var(--accent-1); margin-bottom:0.3em;">Q-Learning</h4>
+            <ul>
+              <li>Oscillates and exhibits instability in the beginning to mid-training</li>
+              <li>Ultimately stabilizes toward higher returns</li>
+            </ul>
+          </div>
+          <div class="exp2-analysis-col">
+            <h4 style="color:var(--accent-2); margin-bottom:0.3em;">Policy Gradient</h4>
+            <ul>
+              <li>Learns faster initially</li>
+              <li>Reaches a very strong policy by episode 500</li>
+              <li>Then drifts and becomes less efficient, yet more stable in general</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="chart-container" id="chart-setup" style="margin-top:1rem;"></div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 10 — Q-Learning Implementation ====== -->
+  <!-- ====== SLIDE 10 — Multi-Seed Experiment Overview ====== -->
   <section class="slide" id="slide-10" data-slide="10">
     <div class="slide-inner">
-      <h2 class="slide-title">Q-Learning — Implementation Details</h2>
-      <div class="slide-columns">
-        <div class="slide-col slide-col--text">
-          <p>Q-values are approximated as a <strong>linear combination</strong> of RBF features:</p>
-          <div class="equation-block">$$Q(s,a) = \mathbf{w}_a^\top \boldsymbol{\phi}(s)$$</div>
-          <p>Each action has its own weight vector. The agent uses <strong>\(\varepsilon\)-greedy</strong> exploration during training — choosing a random action with probability \(\varepsilon\), and the greedy action otherwise.</p>
-          <p>The semi-gradient update adjusts weights toward the TD target, but note the <strong>deadly triad</strong>: combining bootstrapping, off-policy learning, and function approximation can cause instability.</p>
+      <h2 class="slide-title">Multi-Seed Experiment &mdash; Setup &amp; Parameters</h2>
+      <div class="ms-intro-grid">
+        <div class="ms-intro-card">
+          <h4>Training Protocol</h4>
+          <ul>
+            <li><strong>1,000 episodes</strong> per run</li>
+            <li><strong>5 independent seeds</strong> (seeds 0&ndash;4)</li>
+            <li>Evaluation every 50 episodes &mdash; 20 evaluation episodes each</li>
+            <li>Environment: MountainCar-v0 (max 200 steps per episode)</li>
+            <li>Reward: \(-1\) per step &rarr; max return = \(-100\)</li>
+          </ul>
         </div>
-        <div class="slide-col slide-col--viz">
-          <div class="chart-container" id="chart-qlearning-impl"></div>
+        <div class="ms-intro-card ms-card-q">
+          <h4>Q-Learning &mdash; 4 Configurations</h4>
+          <ul>
+            <li>RBF width \(\sigma \in \{0.15,\;0.20\}\)</li>
+            <li>Learning rate \(\alpha \in \{0.003,\;0.005\}\)</li>
+            <li>Total runs: \(4 \times 5 = 20\)</li>
+            <li>Off-policy, \(\varepsilon\)-greedy exploration</li>
+          </ul>
+        </div>
+        <div class="ms-intro-card ms-card-ac">
+          <h4>Actor-Critic &mdash; 8 Configurations</h4>
+          <ul>
+            <li>RBF width \(\sigma \in \{0.15,\;0.20\}\)</li>
+            <li>Actor LR \(\alpha_\theta \in \{0.0003,\;0.0005\}\)</li>
+            <li>Critic LR \(\alpha_v \in \{0.003,\;0.005\}\)</li>
+            <li>Total runs: \(8 \times 5 = 40\)</li>
+          </ul>
+        </div>
+        <div class="ms-intro-card">
+          <h4>Why Multi-Seed?</h4>
+          <ul>
+            <li>RL outcomes vary strongly across random initialisations</li>
+            <li>5 seeds separate algorithm quality from statistical luck</li>
+            <li>Enables honest mean &plusmn; std comparison</li>
+            <li><strong>60 total training runs</strong> &rarr; statistically robust conclusion</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 11 — Actor-Critic Implementation ====== -->
+  <!-- ====== SLIDE 11 — Q-Learning Learning Curves ====== -->
   <section class="slide" id="slide-11" data-slide="11">
     <div class="slide-inner">
-      <h2 class="slide-title">Actor-Critic — Implementation Details</h2>
-      <div class="slide-columns">
-        <div class="slide-col slide-col--text">
-          <p>The <strong>actor</strong> uses a softmax policy over RBF features:</p>
-          <div class="equation-block">$$\pi_\theta(a|s) = \frac{\exp(\theta_a^\top \phi(s))}{\sum_{a'} \exp(\theta_{a'}^\top \phi(s))}$$</div>
-          <p>The <strong>critic</strong> estimates the state value as:</p>
-          <div class="equation-block">$$V_{\mathbf{w}}(s) = \mathbf{w}^\top \boldsymbol{\phi}(s)$$</div>
-          <p>The TD error \(\delta = r + \gamma V(s') - V(s)\) serves as the advantage estimate. The critic reduces variance of the policy gradient, leading to more stable learning.</p>
+      <h2 class="slide-title">Q-Learning &mdash; Learning Curves (All 4 Configurations)</h2>
+      <div class="ms-ql-layout">
+        <div class="ms-ql-grid">
+          <div class="chart-container ms-mini-chart" id="chart-ms-ql-0"></div>
+          <div class="chart-container ms-mini-chart" id="chart-ms-ql-1"></div>
+          <div class="chart-container ms-mini-chart" id="chart-ms-ql-2"></div>
+          <div class="chart-container ms-mini-chart" id="chart-ms-ql-3"></div>
         </div>
-        <div class="slide-col slide-col--viz">
-          <div class="chart-container" id="chart-ac-impl"></div>
-        </div>
+        <ul class="ms-bullets">
+          <li>Shaded band = &plusmn;1 std across 5 seeds &mdash; narrower band means more reproducible results</li>
+          <li><strong>\(\sigma=0.20,\;\alpha=0.003\)</strong> achieves the best final return and narrowest confidence band</li>
+          <li>Higher learning rate (\(\alpha=0.005\)) can cause over-shooting and instability in some seeds</li>
+          <li>All configurations converge within &sim;200&ndash;300 episodes; differences emerge in stability thereafter</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 12 — Hyperparameter Tuning ====== -->
+  <!-- ====== SLIDE 12 — Actor-Critic Learning Curves ====== -->
   <section class="slide" id="slide-12" data-slide="12">
     <div class="slide-inner">
-      <h2 class="slide-title">Hyperparameter Tuning &amp; Fairness</h2>
-      <div class="slide-columns">
-        <div class="slide-col slide-col--text">
-          <p>Both methods were tuned using the <strong>same feature map</strong> and evaluation protocol. Key hyperparameters:</p>
-          <ul>
-            <li><strong>Q-Learning:</strong> learning rate \(\alpha\), RBF width \(\sigma\), \(\varepsilon\)-decay schedule</li>
-            <li><strong>Actor-Critic:</strong> actor LR \(\alpha_\theta\), critic LR \(\alpha_w\), RBF width \(\sigma\)</li>
-          </ul>
-          <p class="text-muted text-sm">Heatmaps show placeholder sensitivity data. Exact values will be filled with final experiment results.</p>
+      <h2 class="slide-title">Actor-Critic &mdash; Learning Curves (All 8 Configurations)</h2>
+      <div class="ms-ac-layout">
+        <div class="ms-chart-stack">
+          <div class="chart-container" id="chart-ms-ac-return"></div>
+          <div class="chart-container" id="chart-ms-ac-success"></div>
         </div>
-        <div class="slide-col slide-col--viz">
-          <div class="chart-container" id="chart-hyperparams"></div>
-        </div>
+        <ul class="ms-bullets">
+          <li>All 8 configurations (thin lines) are strikingly similar &mdash; tight clustering indicates low hyperparameter sensitivity</li>
+          <li>Best configuration (thick line with shaded CI) highlighted; the band is narrow across all seeds</li>
+          <li>AC starts slightly slower than Q-Learning (&sim;50&ndash;150 episodes), but stabilises faster once the critic warms up</li>
+          <li>Nearly all configurations reach &ge;98% success rate and maintain it consistently</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 13 — Learning Curves Comparison ====== -->
+  <!-- ====== SLIDE 13 — Best Config Head-to-Head ====== -->
   <section class="slide" id="slide-13" data-slide="13">
     <div class="slide-inner">
-      <h2 class="slide-title">Learning Curves</h2>
-      <p>Training performance comparison across episodes (placeholder data):</p>
-      <div class="slide-columns" style="flex:1; min-height:0;">
-        <div class="slide-col">
-          <div class="chart-container" id="chart-return-curve" style="height:100%;"></div>
+      <h2 class="slide-title">Best Configuration: Q-Learning vs Actor-Critic</h2>
+      <div class="slide-columns" style="flex:1;min-height:0;">
+        <div class="slide-col slide-col--text">
+          <p>Comparing the <strong>best-performing configuration</strong> of each algorithm (selected by highest final mean return across 5 seeds).</p>
+          <ul>
+            <li>Q-Learning achieves a <strong>slightly higher final return</strong> than Actor-Critic when its best hyperparameters are chosen</li>
+            <li>Actor-Critic reaches near-perfect <strong>success rate faster</strong> and maintains it with lower variance</li>
+            <li>Q-Learning&rsquo;s shaded CI band is noticeably wider &mdash; the same configuration performs differently across seeds</li>
+            <li>Actor-Critic&rsquo;s success curve is <strong>smoother and more stable</strong> from episode 300 onward</li>
+          </ul>
         </div>
-        <div class="slide-col">
-          <div class="chart-container" id="chart-success-curve" style="height:100%;"></div>
+        <div class="slide-col slide-col--viz" style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+          <div class="chart-container" style="flex:1;" id="chart-ms-best-return"></div>
+          <div class="chart-container" style="flex:1;" id="chart-ms-best-success"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 14 — Final Results Summary ====== -->
+  <!-- ====== SLIDE 14 — Hyperparameter Sensitivity Heatmaps ====== -->
   <section class="slide" id="slide-14" data-slide="14">
     <div class="slide-inner">
-      <h2 class="slide-title">Final Results</h2>
-      <p>Summary comparison of Q-Learning vs Actor-Critic after training (placeholder values):</p>
-      <div class="chart-container" id="chart-final-results" style="flex:1; min-height:200px;"></div>
-    </div>
-  </section>
-
-  <!-- ====== SLIDE 15 — Interpretation ====== -->
-  <section class="slide" id="slide-15" data-slide="15">
-    <div class="slide-inner">
-      <h2 class="slide-title">Interpretation</h2>
-      <div class="slide-columns">
+      <h2 class="slide-title">Hyperparameter Sensitivity Heatmaps</h2>
+      <div class="slide-columns" style="flex:1;min-height:0;">
         <div class="slide-col slide-col--text">
-          <p>Both methods successfully learn to solve MountainCar, but exhibit different trade-offs:</p>
+          <p>Colour encodes <strong>final mean return</strong> (greener = better). Cell annotations show mean &plusmn; std.</p>
           <ul>
-            <li>Q-Learning may achieve <strong>slightly better final performance</strong> after full convergence</li>
-            <li>Actor-Critic can learn <strong>competitively in early training phases</strong></li>
-            <li>Results depend heavily on the quality of the <strong>feature representation</strong> and hyperparameter choices</li>
+            <li><strong>Q-Learning:</strong> visible colour gradient (&sim;18 return units from best to worst cell) &mdash; hyperparameters matter significantly</li>
+            <li>Interaction effect: \(\sigma\) and \(\alpha\) are not independent; the best \(\alpha\) depends on \(\sigma\)</li>
+            <li><strong>Actor-Critic:</strong> all 8 cells nearly identical (&lt;3 return units range) &mdash; extremely robust</li>
+            <li>AC&rsquo;s two-timescale learning self-compensates when one LR is slightly off</li>
           </ul>
-          <p class="text-muted text-sm">Placeholder comparison scores shown. To be updated with final analysis.</p>
         </div>
-        <div class="slide-col slide-col--viz">
-          <div class="chart-container" id="chart-interpretation"></div>
+        <div class="ms-heatmap-row slide-col" style="flex:1.4;">
+          <div class="chart-container" id="chart-ms-q-heatmap"></div>
+          <div class="chart-container" id="chart-ms-ac-heatmap"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== SLIDE 16 — Conclusion ====== -->
-  <section class="slide slide--conclusion" id="slide-16" data-slide="16">
-    <div class="conclusion-bg-art" id="conclusionBgArt"></div>
+  <!-- ====== SLIDE 15 — Performance vs Stability Scatter ====== -->
+  <section class="slide" id="slide-15" data-slide="15">
     <div class="slide-inner">
-      <h2 class="text-2xl" style="margin-bottom:1.5rem;">Conclusion</h2>
-      <ul class="conclusion-points">
-        <li>MountainCar requires <strong>long-term planning</strong> due to sparse reward and momentum-based dynamics</li>
-        <li>RBF features provide a <strong>shared, fair representation</strong> for comparing methods in continuous state space</li>
-        <li>Both Q-Learning and Actor-Critic <strong>solve the task</strong> with proper tuning</li>
-        <li>The two families offer <strong>different strengths</strong> — value-based precision vs policy-based flexibility</li>
-      </ul>
-      <p class="text-muted" style="margin-top:2rem;">Thank you &middot; Questions?</p>
+      <h2 class="slide-title">Performance vs. Stability</h2>
+      <div class="slide-columns" style="flex:1;min-height:0;">
+        <div class="slide-col slide-col--text">
+          <p>Each point = one hyperparameter configuration. Ideal configurations sit in the <strong>bottom-right</strong> (high return, low variance).</p>
+          <ul>
+            <li><strong>Actor-Critic (red circles)</strong> cluster tightly &mdash; all configs are both good and reproducible</li>
+            <li><strong>Q-Learning (blue squares)</strong> are scattered &mdash; best config has highest return but the cluster spreads widely</li>
+            <li>Randomly picking Q-Learning hyperparameters risks landing on a mediocre configuration</li>
+            <li>Actor-Critic dominates in the <em>performance-stability trade-off</em> for all practical configs</li>
+          </ul>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-ms-scatter"></div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- ====== SLIDE 16 — Success Rate Curves ====== -->
+  <section class="slide" id="slide-16" data-slide="16">
+    <div class="slide-inner">
+      <h2 class="slide-title">Success Rate Over Training &mdash; All Configurations</h2>
+      <div class="slide-columns" style="flex:1;min-height:0;">
+        <div class="slide-col slide-col--text">
+          <p>Fraction of evaluation episodes where the car reaches the goal. Easier to interpret than raw return for non-ML audiences.</p>
+          <ul>
+            <li><strong>AC thin lines cluster tightly</strong> &mdash; regardless of hyperparameters, all 8 AC configs follow nearly identical success trajectories</li>
+            <li><strong>Q-Learning thin lines spread noticeably</strong> &mdash; some configs plateau lower or converge later</li>
+            <li>Best AC (thick red) reaches ~100% success and holds it smoothly from episode ~400</li>
+            <li>Best Q (thick blue) eventually matches, but with more episode-to-episode variation</li>
+          </ul>
+        </div>
+        <div class="slide-col slide-col--viz">
+          <div class="chart-container" id="chart-ms-success"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 17 — Summary Table ====== -->
+  <section class="slide" id="slide-17" data-slide="17">
+    <div class="slide-inner">
+      <h2 class="slide-title">Summary of All Findings</h2>
+      <div id="ms-summary-container" style="flex:1;overflow:auto;"></div>
+    </div>
+  </section>
+
+
 
 </main>
 

@@ -264,24 +264,38 @@ body {
 [data-theme="dark"] .title-bg-art { opacity: 0.12; }
 
 /* ============================================================
-   CONCLUSION SLIDE
+   MOUNTAINCAR GIFS
    ============================================================ */
-.slide--conclusion .slide-inner {
+.mc-gifs-container {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+.mc-gif-item {
+  flex: 1;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 0.4rem;
+}
+.mc-gif {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.mc-gif-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
   text-align: center;
 }
-.conclusion-points {
-  list-style: none;
-  padding: 0;
-  max-width: 700px;
-}
-.conclusion-points li {
-  font-size: var(--fs-lg);
-  padding: 0.6em 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
-}
-.conclusion-points li:last-child { border-bottom: none; }
+
+
 
 /* ============================================================
    COMPARISON COLUMNS
@@ -302,6 +316,89 @@ body {
   margin-bottom: 0.8em;
 }
 .comparison-col ul { padding-left: 1.2em; }
+
+/* ============================================================
+   EXPERIMENT 2 — 2000-episode comparison slide
+   ============================================================ */
+.exp2-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.6rem;
+}
+.exp2-chart-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.exp2-chart-wrap .chart-container {
+  position: relative;   /* for tooltip positioning */
+}
+.exp2-analysis {
+  display: flex;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+.exp2-analysis-col {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+}
+.exp2-analysis-col h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.exp2-analysis-col ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+.exp2-analysis-col li {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin-bottom: 0.2em;
+  color: var(--text-primary);
+}
+
+/* Tooltip */
+.exp2-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 50;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: var(--shadow);
+  max-width: 260px;
+  transition: opacity 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.exp2-tt-title {
+  font-weight: 600;
+  font-size: 0.82rem;
+  margin-bottom: 0.25em;
+}
+.exp2-tt-ep {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35em;
+}
+.exp2-tt-cfg {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+}
+
+@media (max-width: 899px) {
+  .exp2-analysis {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+}
 
 /* ============================================================
    RESPONSIVE — vertical fallback below 900px
@@ -350,3 +447,160 @@ body {
   .info-cards { grid-template-columns: 1fr; }
   .mobile-hide { display: none !important; }
 }
+
+/* ============================================================
+   MULTI-SEED EXPERIMENT SLIDES (12–20)
+   ============================================================ */
+
+/* ---- Slide 12: Intro cards ---- */
+.ms-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+.ms-intro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.ms-intro-card h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.3em;
+}
+.ms-intro-card ul {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+.ms-intro-card li { margin-bottom: 0.15em; }
+.ms-card-q  { border-left: 3px solid #1f77b4; }
+.ms-card-q h4 { color: #1f77b4; }
+.ms-card-ac { border-left: 3px solid #d62728; }
+.ms-card-ac h4 { color: #d62728; }
+
+/* ---- Slide 13: Q-Learning 2×2 chart grid ---- */
+.ms-ql-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.7rem;
+}
+.ms-ql-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.55rem;
+  flex: 1;
+  min-height: 0;
+}
+.ms-mini-chart {
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ---- Slide 14: AC curves — stacked charts ---- */
+.ms-ac-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.5rem;
+}
+.ms-chart-stack {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+}
+.ms-chart-stack .chart-container {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- Shared bullet list used below charts ---- */
+.ms-bullets {
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.ms-bullets li { margin-bottom: 0.05em; }
+.ms-bullets strong { color: var(--text-primary); }
+
+/* ---- Slide 16: heatmaps side by side ---- */
+.ms-heatmap-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+.ms-heatmap-row .chart-container {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- Slide 20: Summary table ---- */
+.ms-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 1rem;
+}
+.ms-summary-table th,
+.ms-summary-table td {
+  padding: 0.5em 0.9em;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+.ms-summary-table thead th {
+  background: var(--bg-card);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+.ms-summary-table th.col-q  { color: #1f77b4; }
+.ms-summary-table th.col-ac { color: #d62728; }
+.ms-summary-table .crit-col {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.ms-summary-table .winner {
+  background: rgba(42, 157, 92, 0.08);
+  font-weight: 600;
+}
+.ms-summary-table .loser {
+  color: var(--text-muted);
+}
+.ms-summary-bottom {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 0.7em 1em;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-1);
+}
+.ms-summary-bottom strong { color: var(--text-primary); }
+.ms-summary-bottom em { font-style: italic; }
