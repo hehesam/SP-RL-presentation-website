@@ -32,7 +32,7 @@
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
 <!-- Slide counter -->
-<div class="slide-counter" id="slideCounter">01 / 17</div>
+<div class="slide-counter" id="slideCounter">01 / 18</div>
 
 <!-- Theme toggle -->
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">☀</button>
@@ -205,8 +205,43 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 9 — Experiment 2: 2000 Episodes ====== -->
+  <!-- ====== SLIDE 9 — Experiment 1: Effect of RBF Centers ====== -->
   <section class="slide" id="slide-9" data-slide="9">
+    <div class="slide-inner">
+      <h2 class="slide-title">Experiment 1: Effect of Different RBF Centers</h2>
+      <div class="centers-layout">
+        <!-- Shared legend -->
+        <div id="centers-shared-legend" class="centers-shared-legend"></div>
+        <!-- 2×2 chart grid -->
+        <div class="centers-chart-grid">
+          <div class="chart-container" id="chart-centers-pg-return"></div>
+          <div class="chart-container" id="chart-centers-ql-return"></div>
+          <div class="chart-container" id="chart-centers-pg-success"></div>
+          <div class="chart-container" id="chart-centers-ql-success"></div>
+        </div>
+        <!-- Tabbed description -->
+        <div class="centers-description">
+          <div class="centers-tabs">
+            <button class="centers-tab-btn active" data-tab="centers-panel-overview">Overview</button>
+            <button class="centers-tab-btn" data-tab="centers-panel-ql">Q-Learning</button>
+            <button class="centers-tab-btn" data-tab="centers-panel-pg">Policy Gradient</button>
+          </div>
+          <div class="centers-tab-panel active" id="centers-panel-overview">
+            <p>We test <strong>3 RBF grid sizes</strong> — 5×5, 7×7, and 10×10 — to understand how the number of centers affects learning quality and speed for both algorithms.</p>
+          </div>
+          <div class="centers-tab-panel" id="centers-panel-ql">
+            <p><strong>Q-Learning</strong> benefits from a finer grid: 10×10 centers yield higher returns and faster convergence, while 5×5 struggles with coarse generalization.</p>
+          </div>
+          <div class="centers-tab-panel" id="centers-panel-pg">
+            <p><strong>Policy Gradient</strong> is more robust across grid sizes, but still improves with more centers. The 7×7 and 10×10 grids perform similarly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SLIDE 10 — Experiment 2: 2000 Episodes ====== -->
+  <section class="slide" id="slide-10" data-slide="10">
     <div class="slide-inner">
       <h2 class="slide-title">Experiment 2: Evaluating Q-Learning and Policy Gradient on 2000 Episodes</h2>
       <div class="exp2-content">
@@ -234,8 +269,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 10 — Multi-Seed Experiment Overview ====== -->
-  <section class="slide" id="slide-10" data-slide="10">
+  <!-- ====== SLIDE 11 — Multi-Seed Experiment Overview ====== -->
+  <section class="slide" id="slide-11" data-slide="11">
     <div class="slide-inner">
       <h2 class="slide-title">Multi-Seed Experiment &mdash; Setup &amp; Parameters</h2>
       <div class="ms-intro-grid">
@@ -280,8 +315,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 11 — Q-Learning Learning Curves ====== -->
-  <section class="slide" id="slide-11" data-slide="11">
+  <!-- ====== SLIDE 12 — Q-Learning Learning Curves ====== -->
+  <section class="slide" id="slide-12" data-slide="12">
     <div class="slide-inner">
       <h2 class="slide-title">Q-Learning &mdash; Learning Curves (All 4 Configurations)</h2>
       <div class="ms-ql-layout">
@@ -301,8 +336,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 12 — Actor-Critic Learning Curves ====== -->
-  <section class="slide" id="slide-12" data-slide="12">
+  <!-- ====== SLIDE 13 — Actor-Critic Learning Curves ====== -->
+  <section class="slide" id="slide-13" data-slide="13">
     <div class="slide-inner">
       <h2 class="slide-title">Actor-Critic &mdash; Learning Curves (All 8 Configurations)</h2>
       <div class="ms-ac-layout">
@@ -320,8 +355,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 13 — Best Config Head-to-Head ====== -->
-  <section class="slide" id="slide-13" data-slide="13">
+  <!-- ====== SLIDE 14 — Best Config Head-to-Head ====== -->
+  <section class="slide" id="slide-14" data-slide="14">
     <div class="slide-inner">
       <h2 class="slide-title">Best Configuration: Q-Learning vs Actor-Critic</h2>
       <div class="slide-columns" style="flex:1;min-height:0;">
@@ -342,8 +377,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 14 — Hyperparameter Sensitivity Heatmaps ====== -->
-  <section class="slide" id="slide-14" data-slide="14">
+  <!-- ====== SLIDE 15 — Hyperparameter Sensitivity Heatmaps ====== -->
+  <section class="slide" id="slide-15" data-slide="15">
     <div class="slide-inner">
       <h2 class="slide-title">Hyperparameter Sensitivity Heatmaps</h2>
       <div class="slide-columns" style="flex:1;min-height:0;">
@@ -364,8 +399,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 15 — Performance vs Stability Scatter ====== -->
-  <section class="slide" id="slide-15" data-slide="15">
+  <!-- ====== SLIDE 16 — Performance vs Stability Scatter ====== -->
+  <section class="slide" id="slide-16" data-slide="16">
     <div class="slide-inner">
       <h2 class="slide-title">Performance vs. Stability</h2>
       <div class="slide-columns" style="flex:1;min-height:0;">
@@ -385,8 +420,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 16 — Success Rate Curves ====== -->
-  <section class="slide" id="slide-16" data-slide="16">
+  <!-- ====== SLIDE 17 — Success Rate Curves ====== -->
+  <section class="slide" id="slide-17" data-slide="17">
     <div class="slide-inner">
       <h2 class="slide-title">Success Rate Over Training &mdash; All Configurations</h2>
       <div class="slide-columns" style="flex:1;min-height:0;">
@@ -406,8 +441,8 @@
     </div>
   </section>
 
-  <!-- ====== SLIDE 17 — Summary Table ====== -->
-  <section class="slide" id="slide-17" data-slide="17">
+  <!-- ====== SLIDE 18 — Summary Table ====== -->
+  <section class="slide" id="slide-18" data-slide="18">
     <div class="slide-inner">
       <h2 class="slide-title">Summary of All Findings</h2>
       <div id="ms-summary-container" style="flex:1;overflow:auto;"></div>
