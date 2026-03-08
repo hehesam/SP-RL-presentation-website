@@ -252,15 +252,16 @@
           <div class="exp2-analysis-col">
             <h4 style="color:var(--accent-1); margin-bottom:0.3em;">Q-Learning</h4>
             <ul>
-              <li>Oscillates and exhibits instability in the beginning to mid-training</li>
-              <li>Ultimately stabilizes toward higher returns</li>
+              <li>Early training (0-400): high variance, epsilon starts at 1 (full-exploration)</li>
+              <li>The dips (400-800): Hits sharp drops this is the exploration exploitation transition</li>
+              <li>Convergence (800-2000): stabilizes once the epsilon reaches the floor</li>
             </ul>
           </div>
           <div class="exp2-analysis-col">
             <h4 style="color:var(--accent-2); margin-bottom:0.3em;">Policy Gradient</h4>
             <ul>
-              <li>Learns faster initially</li>
-              <li>Reaches a very strong policy by episode 500</li>
+              <li>The policy becomes overconfident in the wrong action around 500 episodes</li>
+              <li>Unlike Q-learning, AC relies soley on softmax stochasticity</li>
               <li>Then drifts and becomes less efficient, yet more stable in general</li>
             </ul>
           </div>
@@ -329,7 +330,7 @@
         <ul class="ms-bullets">
           <li>Shaded band = &plusmn;1 std across 5 seeds &mdash; narrower band means more reproducible results</li>
           <li><strong>\(\sigma=0.15,\;\alpha=0.005\)</strong> achieves the best final return and narrowest confidence band</li>
-          <li>Performance depends on the \(\sigma\)&ndash;\(\alpha\) combination &mdash; \(\sigma=0.15,\;\alpha=0.005\) is exceptionally stable across seeds</li>
+          <li>Tight features need faster learning, wider features need slower learning</li>
           <li>All configurations converge within &sim;200&ndash;300 episodes; differences emerge in stability thereafter</li>
         </ul>
       </div>
