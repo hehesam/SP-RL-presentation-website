@@ -85,27 +85,5 @@ export function initSlide04() {
     .style('font-style', 'italic')
     .text('greedy action');
 
-  // ---- Update rule box at bottom ----
-  const ruleY = barY + 3 * (barH + barGap) + 20;
-  const ruleW = W - 40;
-  const ruleH = 55;
-  svg.append('rect')
-    .attr('x', 20).attr('y', ruleY)
-    .attr('width', ruleW).attr('height', ruleH)
-    .attr('rx', 8)
-    .attr('fill', 'var(--bg-card)')
-    .attr('stroke', 'var(--border)')
-    .attr('stroke-width', 1);
-  svg.append('text')
-    .attr('x', 30).attr('y', ruleY + 16)
-    .attr('fill', 'var(--text-muted)')
-    .style('font-size', '11px')
-    .style('font-weight', '600')
-    .text('Update Rule');
-  svg.append('text')
-    .attr('x', 30).attr('y', ruleY + 38)
-    .attr('fill', 'var(--text-primary)')
-    .style('font-size', '12px')
-    .style('font-family', "'JetBrains Mono', monospace")
-    .text('w ← w + α [ r + γ max Q(s\',a\') − Q(s,a) ] ∇Q(s,a)');
+
 }

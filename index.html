@@ -328,8 +328,8 @@
         </div>
         <ul class="ms-bullets">
           <li>Shaded band = &plusmn;1 std across 5 seeds &mdash; narrower band means more reproducible results</li>
-          <li><strong>\(\sigma=0.20,\;\alpha=0.003\)</strong> achieves the best final return and narrowest confidence band</li>
-          <li>Higher learning rate (\(\alpha=0.005\)) can cause over-shooting and instability in some seeds</li>
+          <li><strong>\(\sigma=0.15,\;\alpha=0.005\)</strong> achieves the best final return and narrowest confidence band</li>
+          <li>Performance depends on the \(\sigma\)&ndash;\(\alpha\) combination &mdash; \(\sigma=0.15,\;\alpha=0.005\) is exceptionally stable across seeds</li>
           <li>All configurations converge within &sim;200&ndash;300 episodes; differences emerge in stability thereafter</li>
         </ul>
       </div>
@@ -361,12 +361,11 @@
       <h2 class="slide-title">Best Configuration: Q-Learning vs Actor-Critic</h2>
       <div class="slide-columns" style="flex:1;min-height:0;">
         <div class="slide-col slide-col--text">
-          <p>Comparing the <strong>best-performing configuration</strong> of each algorithm (selected by highest final mean return across 5 seeds).</p>
+          <p>Best configs by final mean return: <strong>Q</strong> \((\sigma=0.15,\;\alpha=0.005)\) vs <strong>AC</strong> \((\sigma=0.20,\;\alpha_\theta=0.0003,\;\alpha_v=0.003)\).</p>
           <ul>
-            <li>Q-Learning achieves a <strong>slightly higher final return</strong> than Actor-Critic when its best hyperparameters are chosen</li>
-            <li>Actor-Critic reaches near-perfect <strong>success rate faster</strong> and maintains it with lower variance</li>
-            <li>Q-Learning&rsquo;s shaded CI band is noticeably wider &mdash; the same configuration performs differently across seeds</li>
-            <li>Actor-Critic&rsquo;s success curve is <strong>smoother and more stable</strong> from episode 300 onward</li>
+            <li>Q has slightly higher final return (\(\approx\!-133\) vs \(\approx\!-136\)) but <strong>wider CI bands</strong> (more cross-seed variance); AC is more reproducible</li>
+            <li>Q-Learning reaches 1.0 success rate <strong>before episode 200</strong>; AC takes until &sim;episode 800</li>
+            <li>Both dip around episode 350 &mdash; Q recovers by ep 400, AC recovers gradually over &sim;400 episodes</li>
           </ul>
         </div>
         <div class="slide-col slide-col--viz" style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
@@ -385,7 +384,7 @@
         <div class="slide-col slide-col--text">
           <p>Colour encodes <strong>final mean return</strong> (greener = better). Cell annotations show mean &plusmn; std.</p>
           <ul>
-            <li><strong>Q-Learning:</strong> visible colour gradient (&sim;18 return units from best to worst cell) &mdash; hyperparameters matter significantly</li>
+            <li><strong>Q-Learning:</strong> visible colour gradient (&sim;12 return units from best to worst cell) &mdash; hyperparameters matter significantly</li>
             <li>Interaction effect: \(\sigma\) and \(\alpha\) are not independent; the best \(\alpha\) depends on \(\sigma\)</li>
             <li><strong>Actor-Critic:</strong> all 8 cells nearly identical (&lt;3 return units range) &mdash; extremely robust</li>
             <li>AC&rsquo;s two-timescale learning self-compensates when one LR is slightly off</li>
@@ -430,8 +429,8 @@
           <ul>
             <li><strong>AC thin lines cluster tightly</strong> &mdash; regardless of hyperparameters, all 8 AC configs follow nearly identical success trajectories</li>
             <li><strong>Q-Learning thin lines spread noticeably</strong> &mdash; some configs plateau lower or converge later</li>
-            <li>Best AC (thick red) reaches ~100% success and holds it smoothly from episode ~400</li>
-            <li>Best Q (thick blue) eventually matches, but with more episode-to-episode variation</li>
+            <li>Best Q (thick blue) reaches 100% success by episode 300 and recovers quickly after the mid-training dip</li>
+            <li>Best AC (thick red) recovers more gradually, stabilising near 100% around episode 800</li>
           </ul>
         </div>
         <div class="slide-col slide-col--viz">
